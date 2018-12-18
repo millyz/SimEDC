@@ -77,6 +77,9 @@ class Simulate:
 
 def usage(arg):
     print arg, ": -h [--help]"
+    print "-A <sim_type> [--sim_type <sim_type>]"
+    print "-f <fb_prob> [--fb_prob <fb_prob>]"
+    print "-b <beta> [--beta <beta>]"
     print "-i <total_iterations> [--total_iterations <total_iterations>]"
     print "-p <num_processes> [--num_processes <num_processes>]"
     print "-m <mission_time> [--mission_time <mission_time>]"
@@ -100,6 +103,9 @@ def usage(arg):
     print "-d <trace_id> [--trace_id <trace_id>]"
     print ""
     print "Detail:"
+    print "sim_type =  \"regular\" (Regular), \"unifbfb\" (Enable importance sampling)"
+    print "fb_prob = probability of failure biasing"
+    print "beta = a value that is close to the average repair rate"
     print "total_iterations = total number of simulation runs."
     print "num_processes = number of running processes."
     print "mission_time = simulation end time in hours."
@@ -118,7 +124,6 @@ def usage(arg):
     print "Samples:"
     print arg, "-n 9 -k 6 -t rs -T flat"
     print arg, "-n 9 -k 6 -t rs -T hie -g 3,3,3"
-
 
 def get_parms():
     total_iterations = 4
@@ -151,7 +156,7 @@ def get_parms():
     # sim_type = Simulation.REGULAR
     sim_type = Simulation.UNIFBFB
     is_fb_prob = float(0.5)
-    is_beta_ratio = float(.61)
+    is_beta = float(.61)
 
     try:
         # getopt, C-style parser for command line options
@@ -165,7 +170,7 @@ def get_parms():
                                       "use_network", "network_setting",
                                       "use_power_outage",
                                       "use_trace", "trace_id",
-                                      "sim_type","fb_prob", "beta_ratio"])
+                                      "sim_type","fb_prob", "beta"])
     except:
         usage(sys.argv[0])
         print "getopts excepted"
@@ -254,8 +259,8 @@ def get_parms():
                 sim_type = Simulation.UNIFBFB
         elif o in("-f", "fb_prob"):
             is_fb_prob = float(a)
-        elif o in("-b", "beta_ratio"):
-            is_beta_ratio = float(a)
+        elif o in("-b", "beta"):
+            is_beta = float(a)
 
     return (total_iterations, num_processes, mission_time, rseed_plus,
             num_racks, nodes_per_rack, disks_per_node, capacity_per_disk,
@@ -265,7 +270,7 @@ def get_parms():
             use_network, network_setting,
             use_power_outage,
             use_trace, trace_id,
-            sim_type, is_fb_prob, is_beta_ratio)
+            sim_type, is_fb_prob, is_beta)
 
 def do_it(job_description):
     # get the values for each parameter via get_parms()
@@ -277,7 +282,7 @@ def do_it(job_description):
      use_network, network_setting,
      use_power_outage,
      use_trace, trace_id,
-     sim_type, is_fb_prob, is_beta_ratio) = job_description
+     sim_type, is_fb_prob, is_beta) = job_description
 
     nprandom.seed(rseed)
     random.seed(rseed)
@@ -311,7 +316,7 @@ def do_it(job_description):
 
     is_parms = None
     if sim_type == Simulation.UNIFBFB:
-        is_parms = ISParms(is_fb_prob, is_beta_ratio)
+        is_parms = ISParms(is_fb_prob, is_beta)
 
     # init Simulate
     simulation = Simulate(mission_time,
@@ -336,7 +341,7 @@ def get_output(result_simulation, total_iterations, num_stripes, code_n):
     avg_br = float(0)
     avg_single_chunk_repair_ratio = float(0)
 
-    print "len_results = %d" % len(result_simulation)
+    # print "len_results = %d" % len(result_simulation)
     for each in result_simulation:
         print each
         (sample, ori_pattern) = each
@@ -377,7 +382,7 @@ if __name__ == "__main__":
      use_network, network_setting,
      use_power_outage,
      use_trace, trace_id,
-     sim_type, is_fb_prob, is_beta_ratio) = get_parms()
+     sim_type, is_fb_prob, is_beta) = get_parms()
 
     # Check the configured storage capacity is valid
     total_cap = float(capacity_per_disk * num_racks * nodes_per_rack * disks_per_node)
@@ -409,7 +414,7 @@ if __name__ == "__main__":
         print "use_trace =", use_trace, "\ntrace_id =", trace_id
     print "Simulation type = %s" % sim_type
     if sim_type == Simulation.UNIFBFB:
-        print "is_fb_prob = %.3f, is_beta_ratio = %.3f" % (is_fb_prob, is_beta_ratio)
+        print "is_fb_prob = %.3f, is_beta = %.3f" % (is_fb_prob, is_beta)
     print "***************************************\n"
 
     # Check whether the parsed traces exist
@@ -444,7 +449,7 @@ if __name__ == "__main__":
      use_network, network_setting,
      use_power_outage,
      use_trace, trace_id,
-     sim_type, is_fb_prob, is_beta_ratio)
+     sim_type, is_fb_prob, is_beta)
 
     for idx in xrange(len(jobs)):
         jobs[idx] += params_tuple

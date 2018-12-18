@@ -29,6 +29,15 @@ python simedc.py
 ```
 For more details, please run `python simedc.py -h`.  
 
+### Enable importance sampling
+
+The default mode is regular simulation without enabling importance sampling. To
+enable importance sampling, please specify the type of simulator (*sim_type*)
+as "unifbfb" and configure two parameters, probability of failure biasing
+(*fb_prob*) and beta (*beta*). For example, 
+
+`./simedc.py -A unifbfb -f 0.5 -b 0.095 -i 2 -p 1 -t rs -n 9 -k 6 -T flat`.
+
 ### Examples
 
 Set a data center with 16 racks and 8 nodes per rack. 
@@ -69,6 +78,8 @@ Set a data center with 16 racks and 8 nodes per rack.
 - simulation.py: contains *class Simulation* and its functions
 
 - regular_simulation.py: contains *class RegularSimulation* which is inherited from *class Simulation*
+
+- is_simulation.py: contains *class UnifBFBSimulation* which is inherited from *class Simulation*
 
 - network.py: contains *class Network* and its functions to keep track of the network bandwidth
 

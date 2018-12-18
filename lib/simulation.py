@@ -9,9 +9,9 @@ from network import Network
 # Container for importance sampling parameters
 #
 class ISParms:
-    def __init__(self, fb_prob=0.5, beta_ratio=1.0):
+    def __init__(self, fb_prob=0.5, beta=1.0):
         self.fb_prob = fb_prob
-        self.beta_ratio = beta_ratio
+        self.beta = beta
 
 
 class Simulation:
@@ -20,15 +20,15 @@ class Simulation:
     FAILURE="failure"
     REPAIR="repair"
 
-    def __init__(self, mission_time, 
+    def __init__(self, mission_time,
                  num_racks, nodes_per_rack, disks_per_node, capacity_per_disk,
-                 chunk_size, num_stripes, 
+                 chunk_size, num_stripes,
                  code_type, code_n, code_k,
                  place_type, chunk_rack_config,
                  rack_fail_dists, rack_repair_dists, node_fail_dists,
                  node_transient_fail_dists, node_transient_repair_dists,
                  disk_fail_dists, disk_repair_dists,
-                 use_network, network_setting, 
+                 use_network, network_setting,
                  use_power_outage, power_outage_dist, power_outage_duration,
                  code_l=0,
                  use_trace=False, trace_id=0,

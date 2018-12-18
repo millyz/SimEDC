@@ -33,8 +33,7 @@ class UnifBFBSimulation(Simulation):
         # Failure biasing prob
         self.fb_prob = float(self.is_parms.fb_prob)
         # Arrival rate of homogeneous Poisson process, beta
-        # self.poisson_rate = float(self.get_failure_rate() * self.is_parms.beta_ratio)
-        self.poisson_rate = float(self.is_parms.beta_ratio)
+        self.poisson_rate = float(self.is_parms.beta)
         # Likelihood ratio
         self.lr = float(1.)
 
