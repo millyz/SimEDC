@@ -162,15 +162,15 @@ def get_parms():
         # getopt, C-style parser for command line options
         (opts, args) = getopt.getopt(sys.argv[1:], "hi:p:m:u:R:N:D:C:K:S:t:n:k:l:T:g:W:s:O:F:d:A:f:b:",
                                      ["help",
-                                      "total_iterations", "num_processes", "mission_time", "rseed_plus",
-                                      "num_racks", "nodes_per_rack", "disks_per_node", "capacity_per_disk",
-                                      "chunk_size", "num_stripes",
-                                      "code_type", "code_n", "code_k", "code_l",
-                                      "place_type", "chunk_rack_config",
-                                      "use_network", "network_setting",
-                                      "use_power_outage",
-                                      "use_trace", "trace_id",
-                                      "sim_type","fb_prob", "beta"])
+                                      "total_iterations=", "num_processes=", "mission_time=", "rseed_plus=",
+                                      "num_racks=", "nodes_per_rack=", "disks_per_node=", "capacity_per_disk=",
+                                      "chunk_size=", "num_stripes=",
+                                      "code_type=", "code_n=", "code_k=", "code_l=",
+                                      "place_type=", "chunk_rack_config=",
+                                      "use_network=", "network_setting=",
+                                      "use_power_outage=",
+                                      "use_trace=", "trace_id=",
+                                      "sim_type=","fb_prob=", "beta="])
     except:
         usage(sys.argv[0])
         print "getopts excepted"
@@ -185,7 +185,7 @@ def get_parms():
         if o in ("-h", "--help"):
             print usage(sys.argv[0])
             sys.exit(0)
-        elif o in ("-i", "--iterations"):
+        elif o in ("-i", "--total_iterations"):
             total_iterations = int(a)
         elif o in ("-p", "--num_processes"):
             num_processes = int(a)
