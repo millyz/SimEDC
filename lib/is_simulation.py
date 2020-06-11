@@ -24,8 +24,8 @@ class UnifBFBSimulation(Simulation):
     #
     def init(self):
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.ERROR)
-        # self.logger.setLevel(logging.INFO)
+        # self.logger.setLevel(logging.ERROR)
+        self.logger.setLevel(logging.INFO)
         # self.logger.setLevel(logging.DEBUG)
         self.logger.addHandler(console)
         self.logger.propagate = False
@@ -129,6 +129,7 @@ class UnifBFBSimulation(Simulation):
             # self.num_stripes_repaired += len(stripes_to_repair)
             # stripes_to_delay = []
 
+            # print("len(stripes_to_repair) = %d" % len(stripes_to_repair))
             # for each stripe to repair
             for stripe_id in stripes_to_repair:
                 num_failed_chunk = 0
@@ -210,9 +211,13 @@ class UnifBFBSimulation(Simulation):
             repair_duration = cross_rack_download * self.chunk_size / \
                               float(self.network.get_avail_cross_rack_repair_bwth()) # seconds
             # print "repair_time = %.1f" % (repair_duration / 3600.)
+            # print("repair_duration = %.10f, cross_rack_download=%d" % \
+            #        (repair_duration / 3600., cross_rack_download))
 
-            self.total_repair_rate += 3600. / repair_duration
-            self.total_repair_rate_cnt += 1
+            if repair_duration != 0:
+                self.total_repair_rate += 3600. / repair_duration
+                self.total_repair_rate_cnt += 1
+
 
             return repair_duration / 3600.  # hours
 
